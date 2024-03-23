@@ -9,15 +9,20 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "users")
 @Data
-public class User {
+@EqualsAndHashCode(of = "id")
+public class UserEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +32,19 @@ public class User {
 	
 	private String password;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_info_id", referencedColumnName = "id")
+	private UserInfoEntity userInfoEntity;
+	
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JoinTable(
+			name = "users_authorities",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
 	private Set<Role> authorities;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<Appointment> appointments;
+	private List<AppointmentEntity> appointments;
+	
+	
 }

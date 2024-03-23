@@ -3,6 +3,8 @@ package com.bagas.hospital_rest.entity;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +18,7 @@ import lombok.Data;
 @Entity
 @Table(name = "doctors")
 @Data
-public class Doctor {
+public class DoctorEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +36,6 @@ public class Doctor {
 	private LocalTime endWork;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
-	private List<Appointment> appointments;
+	@SQLRestriction(value = "user_id IS NOT NULL")
+	private List<AppointmentEntity> appointments;
 }
