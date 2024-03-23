@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.bagas.hospital_rest.entity.Role;
 import com.bagas.hospital_rest.entity.UserEntity;
-import com.bagas.hospital_rest.entity.UserInfoEntity;
 
 import lombok.Data;
 
@@ -19,7 +17,7 @@ public class User {
 	
 	private String password;
 	
-	private UserInfoEntity userInfoEntity;
+	private UserInfo userInfo;
 	
 	private Set<Role> authorities;
 
@@ -30,8 +28,8 @@ public class User {
 		user.setId(entity.getId());
 		user.setUsername(entity.getUsername());
 		user.setPassword(entity.getPassword());
-		user.setUserInfoEntity(entity.getUserInfoEntity());
-		user.setAuthorities(entity.getAuthorities());
+		user.setUserInfo(UserInfo.toModel(entity.getUserInfoEntity()));
+		user.setAuthorities(entity.getAuthorities().stream().map(Role::toModel).collect(Collectors.toSet()));
 		user.setAppointments(entity.getAppointments().stream().map(UserAppointment::toModel).collect(Collectors.toList()));
 		
 		return user;
