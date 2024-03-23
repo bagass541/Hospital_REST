@@ -3,6 +3,8 @@ package com.bagas.hospital_rest.entity;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -41,6 +43,7 @@ public class UserEntity {
 			name = "users_authorities",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
+	@SQLRestriction(value = "a1_0.authorities_id = 2")
 	private Set<Role> authorities;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
