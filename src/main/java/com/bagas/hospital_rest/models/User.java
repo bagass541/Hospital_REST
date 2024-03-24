@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.bagas.hospital_rest.entity.UserEntity;
 
 import lombok.Data;
 
 @Data
-public class User {
+public class User extends RepresentationModel<User>{
 
 	private long id;
 	
 	private String username;
-	
-	private String password;
 	
 	private UserInfo userInfo;
 	
@@ -27,7 +27,6 @@ public class User {
 		User user = new User();
 		user.setId(entity.getId());
 		user.setUsername(entity.getUsername());
-		user.setPassword(entity.getPassword());
 		user.setUserInfo(UserInfo.toModel(entity.getUserInfoEntity()));
 		user.setAuthorities(entity.getAuthorities().stream().map(Role::toModel).collect(Collectors.toSet()));
 		user.setAppointments(entity.getAppointments().stream().map(UserAppointment::toModel).collect(Collectors.toList()));

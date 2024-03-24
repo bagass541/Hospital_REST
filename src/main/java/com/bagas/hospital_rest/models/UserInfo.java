@@ -1,11 +1,13 @@
 package com.bagas.hospital_rest.models;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.bagas.hospital_rest.entity.UserInfoEntity;
 
 import lombok.Data;
 
 @Data
-public class UserInfo {
+public class UserInfo extends RepresentationModel<UserInfo>{
 	
 	private long id;
 	
