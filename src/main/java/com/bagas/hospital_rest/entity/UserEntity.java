@@ -34,7 +34,7 @@ public class UserEntity {
 	
 	private String password;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_info_id", referencedColumnName = "id")
 	private UserInfoEntity userInfoEntity;
 	
@@ -44,7 +44,7 @@ public class UserEntity {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
 	@SQLRestriction(value = "a1_0.authorities_id = 2")
-	private Set<Role> authorities;
+	private Set<RoleEntity> authorities;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<AppointmentEntity> appointments;

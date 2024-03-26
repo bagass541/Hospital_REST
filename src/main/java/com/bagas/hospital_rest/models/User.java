@@ -4,34 +4,35 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.bagas.hospital_rest.entity.Role;
+import org.springframework.hateoas.RepresentationModel;
+
 import com.bagas.hospital_rest.entity.UserEntity;
-import com.bagas.hospital_rest.entity.UserInfoEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
 @Data
-public class User {
+public class User extends RepresentationModel<User>{
 
 	private long id;
 	
 	private String username;
 	
-	private String password;
+	@JsonIgnore
+	private UserInfo userInfo;
 	
-	private UserInfoEntity userInfoEntity;
-	
+	@JsonIgnore
 	private Set<Role> authorities;
 
+	@JsonIgnore
 	private List<UserAppointment> appointments;
 	
 	public static User toModel(UserEntity entity) {
 		User user = new User();
 		user.setId(entity.getId());
 		user.setUsername(entity.getUsername());
-		user.setPassword(entity.getPassword());
-		user.setUserInfoEntity(entity.getUserInfoEntity());
-		user.setAuthorities(entity.getAuthorities());
+		user.setUserInfo(UserInfo.toModel(entity.getUserInfoEntity()));
+		user.setAuthorities(entity.getAuthorities().stream().map(Role::toModel).collect(Collectors.toSet()));
 		user.setAppointments(entity.getAppointments().stream().map(UserAppointment::toModel).collect(Collectors.toList()));
 		
 		return user;
