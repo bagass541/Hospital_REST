@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.bagas.hospital_rest.models.DoctorAppointment;
 import com.bagas.hospital_rest.models.UserAppointment;
 import com.bagas.hospital_rest.services.AppointmentService;
 
@@ -27,5 +28,15 @@ public class AppointmentController {
 					return model;
 				}).collect(Collectors.toList());
 		return ResponseEntity.ok(userAppointments);
+	}
+	
+	@GetMapping("/doctors/{id}/appointments")
+	public ResponseEntity<List<EntityModel<DoctorAppointment>>> getAppointmentsForDoctor(@PathVariable("id") Long doctorId) {
+		List<EntityModel<DoctorAppointment>> doctorAppointments = appointmentService.getAllByDoctor(doctorId).stream()
+				.map(appointment -> {
+					EntityModel<DoctorAppointment> model = EntityModel.of(appointment);
+					return model;
+				}).collect(Collectors.toList());
+		return ResponseEntity.ok(doctorAppointments);
 	}
 }
