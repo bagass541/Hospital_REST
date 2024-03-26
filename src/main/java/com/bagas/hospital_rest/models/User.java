@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.hateoas.RepresentationModel;
 
 import com.bagas.hospital_rest.entity.UserEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -17,10 +18,13 @@ public class User extends RepresentationModel<User>{
 	
 	private String username;
 	
+	@JsonIgnore
 	private UserInfo userInfo;
 	
+	@JsonIgnore
 	private Set<Role> authorities;
 
+	@JsonIgnore
 	private List<UserAppointment> appointments;
 	
 	public static User toModel(UserEntity entity) {
