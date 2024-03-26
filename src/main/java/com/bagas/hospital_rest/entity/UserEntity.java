@@ -34,7 +34,7 @@ public class UserEntity {
 	
 	private String password;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_info_id", referencedColumnName = "id")
 	private UserInfoEntity userInfoEntity;
 	
