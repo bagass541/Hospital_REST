@@ -27,26 +27,16 @@ public class UserInfoController {
 	private UserInfoService userInfoService;
 	
 	@GetMapping("/userInfos")
-	public ResponseEntity<List<EntityModel<UserInfo>>> getUserInfos() {
-		List<EntityModel<UserInfo>> models = userInfoService.getAll().stream()
-				.map(userInfo -> {
-					Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-					.getOneUser(userInfo.getUserEntity().getId()))
-					.withRel("/users/" + userInfo.getUserEntity().getId());
-					EntityModel<UserInfo> model = EntityModel.of(UserInfo.toModel(userInfo), userLink);
-					return model;
-				}).collect(Collectors.toList());
-		
-		return ResponseEntity.ok(models);
+	public ResponseEntity<List<UserInfo>> getUserInfos() {
+		List<UserInfo> userInfos = userInfoService.getAll();
+		return ResponseEntity.ok(userInfos);
 	}
 	
 	@GetMapping("/{id}/userInfo")
-	public ResponseEntity<EntityModel<UserInfo>> getOneUserInfo(@PathVariable("id") Long id) {
+	public ResponseEntity<UserInfo> getOneUserInfo(@PathVariable("id") Long id) {
 		try {
-			UserInfo userInfo = userInfoService.getOne(id);
-			EntityModel<UserInfo> model = EntityModel.of(userInfo);
-			
-			return ResponseEntity.ok(model);
+			UserInfo userInfo = userInfoService.getOne(id);		
+			return ResponseEntity.ok(userInfo);
 		} catch (UserInfoNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Информация о пользователе не найдена", e);
 		}

@@ -20,13 +20,8 @@ public class RoleContoller {
 	private RoleService roleService;
 	
 	@GetMapping("/users/{id}/roles")
-	public ResponseEntity<List<EntityModel<Role>>> getRolesByUser(@PathVariable("id") Long userId) {
-		List<EntityModel<Role>> roles = roleService.getAllByUser(userId).stream()
-				.map(role -> {
-					EntityModel<Role> model = EntityModel.of(role);
-					return model;
-				}).collect(Collectors.toList());
-		
+	public ResponseEntity<List<Role>> getRolesByUser(@PathVariable("id") Long userId) {
+		List<Role> roles = roleService.getAllByUser(userId);
 		return ResponseEntity.ok(roles);
 	}
 }

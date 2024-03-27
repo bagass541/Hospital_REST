@@ -1,6 +1,7 @@
 package com.bagas.hospital_rest.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class UserInfoService {
 	@Autowired
 	private UserInfoRepo userInfoRepo;
 	
-	public List<UserInfoEntity> getAll() {
-		return userInfoRepo.findAll();
+	public List<UserInfo> getAll() {
+		return userInfoRepo.findAll().stream().map(UserInfo::toModel).collect(Collectors.toList());
 	}
 	
 	public UserInfo getOne(Long id) throws UserInfoNotFoundException {
