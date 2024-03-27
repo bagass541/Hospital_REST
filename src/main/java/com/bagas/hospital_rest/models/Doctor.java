@@ -1,8 +1,6 @@
 package com.bagas.hospital_rest.models;
 
 import java.time.LocalTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
@@ -12,11 +10,12 @@ import com.bagas.hospital_rest.controller.AppointmentController;
 import com.bagas.hospital_rest.controller.DoctorController;
 import com.bagas.hospital_rest.entity.DoctorEntity;
 import com.bagas.hospital_rest.entity.DoctorType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class Doctor extends RepresentationModel<Doctor> {
 	
 	private long id;
@@ -29,9 +28,6 @@ public class Doctor extends RepresentationModel<Doctor> {
 	
 	private LocalTime endWork;
 	
-	@JsonIgnore
-	private List<DoctorAppointment> appointments;
-	
 	public static Doctor toModel(DoctorEntity entity)   {
 		if(entity == null) {
 			return null;
@@ -43,8 +39,6 @@ public class Doctor extends RepresentationModel<Doctor> {
 		doctor.setFio(entity.getFio());
 		doctor.setStartWork(entity.getStartWork());
 		doctor.setEndWork(entity.getEndWork());
-		doctor.setAppointments(entity.getAppointments().stream()
-				.map(DoctorAppointment::toModel).collect(Collectors.toList()));
 		
 		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DoctorController.class)
 				.getOneDoctor(doctor.getId())).withSelfRel();
