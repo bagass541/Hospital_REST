@@ -3,17 +3,17 @@ package com.bagas.hospital_rest.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.bagas.hospital_rest.entity.DoctorEntity;
 import com.bagas.hospital_rest.exceptions.DoctorNotFoundException;
@@ -28,13 +28,13 @@ public class DoctorController {
 	private DoctorService doctorService;
 
 	@PostMapping
-	public ResponseEntity<String> createDoctor(@RequestBody DoctorEntity doctor) {
+	public ResponseEntity<Doctor> createDoctor(@RequestBody DoctorEntity doctor) {
 		DoctorEntity newDoctor = doctorService.createDoctor(doctor);
 		
 		if(newDoctor != null) {
-			return ResponseEntity.ok("Врач успешно добавлен");
+			return ResponseEntity.ok(Doctor.toModel(newDoctor));
 		} else {
-			return ResponseEntity.ok("Произошла ошибка");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This username exists");
 		}
 
 	}
@@ -47,9 +47,11 @@ public class DoctorController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Doctor> getOneDoctor(@PathVariable("id") Long id) throws DoctorNotFoundException {
-		System.out.println(id);
-		return ResponseEntity.ok(doctorService.getOne(id));
+	public ResponseEntity<Doctor> getOneDoctor(@PathVariable("id") Long id) {
+		Doctor doctor = doctorService.getOne(id);
+		if(doctor == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден");
+		
+		return ResponseEntity.ok(doctor);
 	}
 	
 	@DeleteMapping("/{id}")

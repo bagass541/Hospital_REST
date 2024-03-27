@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bagas.hospital_rest.entity.DoctorEntity;
-import com.bagas.hospital_rest.entity.DoctorType;
 import com.bagas.hospital_rest.exceptions.DoctorNotFoundException;
 import com.bagas.hospital_rest.models.Doctor;
 import com.bagas.hospital_rest.repositories.DoctorRepo;
@@ -26,11 +25,8 @@ public class DoctorService {
 		return doctorRepo.findAll().stream().map(Doctor::toModel).collect(Collectors.toList());
 	}
 	
-	public Doctor getOne(Long id) throws DoctorNotFoundException {
-		DoctorEntity doctor = doctorRepo.findById(id)
-				.orElseThrow(() -> new DoctorNotFoundException());
-
-		if(doctor == null) throw new DoctorNotFoundException();
+	public Doctor getOne(Long id)  {
+		DoctorEntity doctor = doctorRepo.findById(id).get();
 
 		return Doctor.toModel(doctor);
 	}
