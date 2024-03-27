@@ -44,17 +44,23 @@ public class UserService {
 		return id;
 	}
 	
-	public User update(Long id, UserEntity user) throws UserNotFoundException {
-		UserEntity updatingUser = userRepo.findById(id)
+	public User update(Long userId, UserEntity user) throws UserNotFoundException {
+		UserEntity updatingUser = userRepo.findById(userId)
 				.orElseThrow(() -> new UserNotFoundException());
-		System.out.println(user.getUserInfoEntity().getId());
 		updatingUser.setId(user.getId());
 		updatingUser.setUsername(user.getUsername());
 		updatingUser.setPassword(user.getPassword());
 		updatingUser.setUserInfoEntity(user.getUserInfoEntity());
-		updatingUser.setAuthorities(user.getAuthorities());
-		updatingUser.setAppointments(user.getAppointments());
 		
+		if(user.getAuthorities() != null) {
+			updatingUser.setAuthorities(user.getAuthorities());
+		}
+		
+		if(user.getAppointments() != null) {
+			updatingUser.setAppointments(user.getAppointments());
+		}
+
+		userRepo.save(updatingUser);
 		return User.toModel(updatingUser);
 	}
 }
