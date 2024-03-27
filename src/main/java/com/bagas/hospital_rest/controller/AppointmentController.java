@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.bagas.hospital_rest.models.DoctorAppointment;
-import com.bagas.hospital_rest.models.UserAppointment;
+import com.bagas.hospital_rest.models.Appointment;
 import com.bagas.hospital_rest.services.AppointmentService;
 
 @Controller
@@ -21,12 +21,8 @@ public class AppointmentController {
 	private AppointmentService appointmentService;
 	
 	@GetMapping("users/{id}/appointments")
-	public ResponseEntity<List<EntityModel<UserAppointment>>> getAppointmentsForUser(@PathVariable("id") Long userId) {
-		List<EntityModel<UserAppointment>> userAppointments = appointmentService.getAllByUser(userId).stream()
-				.map(appointment -> {
-					EntityModel<UserAppointment> model = EntityModel.of(appointment);
-					return model;
-				}).collect(Collectors.toList());
+	public ResponseEntity<List<Appointment>> getAppointmentsForUser(@PathVariable("id") Long userId) {
+		List<Appointment> userAppointments = appointmentService.getAllByUser(userId);
 		return ResponseEntity.ok(userAppointments);
 	}
 	
