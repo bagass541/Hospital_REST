@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, of = {"id", "fio", "number"})
 public class UserInfo extends RepresentationModel<UserInfo>{
 	
 	private long id;
@@ -27,7 +27,7 @@ public class UserInfo extends RepresentationModel<UserInfo>{
 		userInfo.setNumber(entity.getNumber());
 		
 		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-				.getOneUser(entity.getUserEntity().getId())).withRel("user");
+				.getOneUser(entity.getUser().getId())).withRel("user");
 		
 		userInfo.add(userLink);
 		
