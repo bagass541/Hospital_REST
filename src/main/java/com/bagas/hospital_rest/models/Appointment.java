@@ -6,6 +6,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
+import com.bagas.hospital_rest.controller.AppointmentController;
 import com.bagas.hospital_rest.controller.DoctorController;
 import com.bagas.hospital_rest.controller.UserController;
 import com.bagas.hospital_rest.entity.AppointmentEntity;
@@ -14,7 +15,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, of = {"id", "time"})
 public class Appointment extends RepresentationModel<Appointment> {
 
 	private long id;
@@ -26,13 +27,21 @@ public class Appointment extends RepresentationModel<Appointment> {
 		userAppointment.setId(entity.getId());
 		userAppointment.setTime(entity.getTime());
 		
-		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-				.getOneUser(entity.getUser().getId())).withRel("user");
+		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AppointmentController.class)
+				.getOneAppointment(entity.getId())).withSelfRel();
+		
 		Link doctorLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DoctorController.class)
 				.getOneDoctor(entity.getDoctor().getId())).withRel("doctor");
 		
-		userAppointment.add(doctorLink, userLink);
-		
+
+		if(entity.getUser() != null) {
+			Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+					.getOneUser(entity.getUser().getId())).withRel("user");
+			userAppointment.add(selfLink, doctorLink, userLink);
+		} else {
+			userAppointment.add(selfLink, doctorLink);
+		}
+	
 		return userAppointment;
 	}
 	
