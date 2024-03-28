@@ -8,9 +8,11 @@ import com.bagas.hospital_rest.controller.UserController;
 import com.bagas.hospital_rest.entity.RoleEntity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class Role extends RepresentationModel<Role>{
+@EqualsAndHashCode(callSuper = false, of = {"id", "authority"})
+public class Role extends RepresentationModel<Role> {
 
 	private long id;
 	
