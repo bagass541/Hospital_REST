@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "users_info")
 @Data
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = {"id", "fio", "number"})
 public class UserInfoEntity {
 
 	@Id
@@ -23,6 +23,6 @@ public class UserInfoEntity {
 	
 	private String number;
 	
-	@OneToOne(mappedBy = "userInfoEntity")
-	private UserEntity userEntity;
+	@OneToOne(mappedBy = "userInfo")
+	private UserEntity user;
 }
