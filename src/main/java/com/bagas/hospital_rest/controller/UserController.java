@@ -44,7 +44,7 @@ public class UserController {
 					.buildAndExpand(newUser.getId())
 					.toUri()).body(newUser);
 		} catch (UsernameExistsException e) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "This username exists", e);
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Пользователь с таким логином существует", e);
 		}
 	}
 	
@@ -59,18 +59,20 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
-		userService.delete(id);
-		return ResponseEntity.ok(id);
+	public ResponseEntity<Long> deleteUser(@PathVariable("id") Long id) {
+		try {	
+			return ResponseEntity.ok(userService.delete(id));
+		} catch (UserNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
+		}
 	}
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserEntity userEntity) {
 		try {
-			User updatedUser = userService.update(id, userEntity);
-			return ResponseEntity.ok(updatedUser);
+			return ResponseEntity.ok(userService.update(id, userEntity));
 		} catch (UserNotFoundException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", e);
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
 		}
 	}
 	
