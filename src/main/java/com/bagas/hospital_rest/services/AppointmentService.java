@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bagas.hospital_rest.models.DoctorAppointment;
 import com.bagas.hospital_rest.entity.AppointmentEntity;
 import com.bagas.hospital_rest.exceptions.AppointmentNotFoundException;
 import com.bagas.hospital_rest.models.Appointment;
@@ -30,9 +29,9 @@ public class AppointmentService {
 		return userAppointments;
 	}
 	
-	public List<DoctorAppointment> getAllByDoctor(Long doctorId) {
-		List<DoctorAppointment> doctorAppointments = appointmentRepo.findByDoctorId(doctorId).stream()
-				.map(DoctorAppointment::toModel)
+	public List<Appointment> getAllByDoctor(Long doctorId) {
+		List<Appointment> doctorAppointments = appointmentRepo.findByDoctorId(doctorId).stream()
+				.map(Appointment::toModel)
 				.collect(Collectors.toList());
 		
 		return doctorAppointments;

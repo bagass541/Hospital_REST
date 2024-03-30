@@ -1,10 +1,9 @@
 package com.bagas.hospital_rest.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.bagas.hospital_rest.models.DoctorAppointment;
 import com.bagas.hospital_rest.entity.AppointmentEntity;
 import com.bagas.hospital_rest.exceptions.AppointmentNotFoundException;
 import com.bagas.hospital_rest.models.Appointment;
@@ -41,12 +39,8 @@ public class AppointmentController {
 	}
 	
 	@GetMapping("/doctors/{id}/appointments")
-	public ResponseEntity<List<EntityModel<DoctorAppointment>>> getAppointmentsForDoctor(@PathVariable("id") Long doctorId) {
-		List<EntityModel<DoctorAppointment>> doctorAppointments = appointmentService.getAllByDoctor(doctorId).stream()
-				.map(appointment -> {
-					EntityModel<DoctorAppointment> model = EntityModel.of(appointment);
-					return model;
-				}).collect(Collectors.toList());
+	public ResponseEntity<List<Appointment>> getAppointmentsForDoctor(@PathVariable("id") Long doctorId) {
+		List<Appointment> doctorAppointments = appointmentService.getAllByDoctor(doctorId);
 		return ResponseEntity.ok(doctorAppointments);
 	}
 	
