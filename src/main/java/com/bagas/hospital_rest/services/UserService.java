@@ -28,7 +28,11 @@ public class UserService {
 	
 	public User create(UserEntity user) throws UsernameExistsException {
 		if(userRepo.findByUsername(user.getUsername()) != null) throw new UsernameExistsException();
-		userInfoRepo.save(user.getUserInfoEntity());
+		
+		if(user.getUserInfo() != null) {
+			userInfoRepo.save(user.getUserInfo());
+		}
+		
 		return User.toModel(userRepo.save(user));
 	}
 	
@@ -39,28 +43,23 @@ public class UserService {
 		return User.toModel(userEntity);
 	}
 	
-	public Long delete(Long id) {
+	public Long delete(Long id) throws UserNotFoundException {
+		if(userRepo.findById(id).get() == null) throw new UserNotFoundException();
+		
 		userRepo.deleteById(id);
 		return id;
 	}
 	
-	public User update(Long userId, UserEntity user) throws UserNotFoundException {
-		UserEntity updatingUser = userRepo.findById(userId)
+	public User update(Long id, UserEntity user) throws UserNotFoundException {
+		UserEntity updatingUser = userRepo.findById(id)
 				.orElseThrow(() -> new UserNotFoundException());
-		updatingUser.setId(user.getId());
-		updatingUser.setUsername(user.getUsername());
-		updatingUser.setPassword(user.getPassword());
-		updatingUser.setUserInfoEntity(user.getUserInfoEntity());
-		
-		if(user.getAuthorities() != null) {
-			updatingUser.setAuthorities(user.getAuthorities());
-		}
-		
-		if(user.getAppointments() != null) {
-			updatingUser.setAppointments(user.getAppointments());
-		}
 
-		userRepo.save(updatingUser);
-		return User.toModel(updatingUser);
+		if(user.getUsername() != null) updatingUser.setUsername(user.getUsername());
+		if(user.getPassword() != null) updatingUser.setPassword(user.getPassword());
+		if(user.getUserInfo() != null) updatingUser.setUserInfo(user.getUserInfo());
+		if(user.getAuthorities() != null) updatingUser.setAuthorities(user.getAuthorities());
+		if(user.getAppointments() != null) updatingUser.setAppointments(user.getAppointments());
+		
+		return User.toModel(userRepo.save(updatingUser));
 	}
 }
