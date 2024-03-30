@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.bagas.hospital_rest.entity.RoleEntity;
-import com.bagas.hospital_rest.models.Role;
 
 public interface RoleRepo extends JpaRepository<RoleEntity, Long> {
 		
 	@Query("SELECT r FROM RoleEntity r JOIN r.users u WHERE u.id = :id")
 	List<RoleEntity> findAllByUserId(@Param("id") Long id);
+	
+	RoleEntity findByAuthority(String authority);
 }

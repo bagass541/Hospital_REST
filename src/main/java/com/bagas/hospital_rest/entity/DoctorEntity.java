@@ -8,6 +8,7 @@ import org.hibernate.annotations.SQLRestriction;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,7 +36,7 @@ public class DoctorEntity {
 	@Column(name = "end_work")
 	private LocalTime endWork;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "doctor")
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "doctor")
 	@SQLRestriction(value = "user_id IS NOT NULL")
 	private List<AppointmentEntity> appointments;
 }

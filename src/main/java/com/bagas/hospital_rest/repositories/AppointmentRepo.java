@@ -1,5 +1,6 @@
 package com.bagas.hospital_rest.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,7 @@ public interface AppointmentRepo extends JpaRepository<AppointmentEntity, Long> 
 	
 	@Query("SELECT app FROM AppointmentEntity app WHERE app.doctor.id = :id and app.user IS NOT NULL")
 	List<AppointmentEntity> findByDoctorId(@Param("id") Long id);
+	
+	@Query("SELECT app FROM AppointmentEntity app WHERE app.doctor.id = :doctorId AND app.user.id = :userId AND app.time = :time")
+	AppointmentEntity findByDoctorUserTime(@Param("doctorId") Long doctorId, @Param("userId") Long userId, @Param("time") LocalDateTime time);
 }

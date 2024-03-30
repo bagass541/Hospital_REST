@@ -3,8 +3,6 @@ package com.bagas.hospital_rest.entity;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.annotations.SQLRestriction;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "users")
 @Data
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = {"id", "username", "password", "userInfo"})
 public class UserEntity {
 
 	@Id
@@ -34,19 +32,18 @@ public class UserEntity {
 	
 	private String password;
 	
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_info_id", referencedColumnName = "id")
-	private UserInfoEntity userInfoEntity;
+	private UserInfoEntity userInfo;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
 			name = "users_authorities",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
-	@SQLRestriction(value = "a1_0.authorities_id = 2")
 	private Set<RoleEntity> authorities;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	private List<AppointmentEntity> appointments;
 	
 	

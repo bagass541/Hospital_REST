@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bagas.hospital_rest.entity.UserInfoEntity;
 import com.bagas.hospital_rest.exceptions.UserInfoNotFoundException;
+import com.bagas.hospital_rest.exceptions.UserInfoWithNumberExistsException;
 import com.bagas.hospital_rest.models.UserInfo;
 import com.bagas.hospital_rest.repositories.UserInfoRepo;
 
@@ -22,10 +23,34 @@ public class UserInfoService {
 	}
 	
 	public UserInfo getOne(Long id) throws UserInfoNotFoundException {
-		UserInfoEntity userInfo = userInfoRepo.findByUserEntityId(id);
-		
-		if(userInfo == null) throw new UserInfoNotFoundException();
+		UserInfoEntity userInfo = userInfoRepo.findByUserEntityId(id)
+				.orElseThrow(() -> new UserInfoNotFoundException());
 		
 		return UserInfo.toModel(userInfo);
+	}
+	
+	public UserInfo create(UserInfoEntity userInfoEntity) throws UserInfoWithNumberExistsException {
+		if(userInfoRepo.findByNumber(userInfoEntity.getNumber()) != null) throw new UserInfoWithNumberExistsException();
+		
+		return UserInfo.toModel(userInfoRepo.save(userInfoEntity));
+	}
+	
+	public Long delete(Long id) throws UserInfoNotFoundException {
+		userInfoRepo.findById(id)
+			.orElseThrow(() -> new UserInfoNotFoundException());
+		
+		userInfoRepo.deleteById(id);
+		return id;
+	}
+	
+	public UserInfo update(Long id, UserInfoEntity userInfoEntity) throws UserInfoNotFoundException {
+		UserInfoEntity updatinUserInfo = userInfoRepo.findById(id)
+			.orElseThrow(() -> new UserInfoNotFoundException());
+		
+		if(userInfoEntity.getFio() != null) updatinUserInfo.setFio(userInfoEntity.getFio());
+		if(userInfoEntity.getNumber() != null) updatinUserInfo.setNumber(userInfoEntity.getNumber());
+		
+		userInfoRepo.save(updatinUserInfo);
+		return UserInfo.toModel(updatinUserInfo);
 	}
 }

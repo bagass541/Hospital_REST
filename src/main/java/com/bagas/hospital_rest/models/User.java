@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = false, of = {"id", "username", "userInfo"})
 public class User extends RepresentationModel<User> {
 
 	private long id;
@@ -40,8 +40,11 @@ public class User extends RepresentationModel<User> {
 		Long userId = entity.getId();
 		user.setId(userId);
 		user.setUsername(entity.getUsername());
-		user.setUserInfo(UserInfo.toModel(entity.getUserInfoEntity()));
 		user.setAuthorities(entity.getAuthorities().stream().map(Role::toModel).collect(Collectors.toSet()));
+		
+		if(entity.getUserInfo() != null) {
+			user.setUserInfo(UserInfo.toModel(entity.getUserInfo()));
+		}
 		
 		if(entity.getAppointments() != null) {
 			user.setAppointments(entity.getAppointments().stream().map(Appointment::toModel).collect(Collectors.toList()));
