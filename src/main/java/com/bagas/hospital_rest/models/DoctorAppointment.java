@@ -19,7 +19,7 @@ public class DoctorAppointment {
 		DoctorAppointment doctorAppointment = new DoctorAppointment();
 		doctorAppointment.setId(appointmentEntity.getId());
 		if(appointmentEntity.getUser() != null) {
-			doctorAppointment.setUsername(appointmentEntity.getUser().getUserInfoEntity().getFio());
+			doctorAppointment.setUsername(appointmentEntity.getUser().getUserInfo().getFio());
 		}
 		doctorAppointment.setTime(appointmentEntity.getTime());
 		
