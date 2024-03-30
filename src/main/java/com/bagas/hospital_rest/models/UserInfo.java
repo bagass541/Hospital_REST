@@ -5,6 +5,7 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import com.bagas.hospital_rest.controller.UserController;
+import com.bagas.hospital_rest.controller.UserInfoController;
 import com.bagas.hospital_rest.entity.UserInfoEntity;
 
 import lombok.Data;
@@ -21,16 +22,29 @@ public class UserInfo extends RepresentationModel<UserInfo>{
 	private String number;
 	
 	public static UserInfo toModel(UserInfoEntity entity) {
+		Long userInfoId = entity.getId();
 		UserInfo userInfo = new UserInfo();
-		userInfo.setId(entity.getId());
+		userInfo.setId(userInfoId);
 		userInfo.setFio(entity.getFio());
 		userInfo.setNumber(entity.getNumber());
 		
-		Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-				.getOneUser(entity.getUser().getId())).withRel("user");
+		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserInfoController.class)
+				.getOneUserInfo(userInfoId)).withSelfRel();
 		
-		userInfo.add(userLink);
+		Link putLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserInfoController.class)
+				.updateUserInfo(userInfoId, entity)).withRel("update").withType("PUT");
 		
+		Link deleteLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserInfoController.class)
+				.deleteUserInfo(userInfoId)).withRel("delete").withType("DELETE");
+		
+		if(entity.getUser() != null) {
+			Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+					.getOneUser(entity.getUser().getId())).withRel("user");
+			userInfo.add(selfLink, putLink, deleteLink, userLink);
+		} else {
+			userInfo.add(selfLink, putLink, deleteLink);
+		}
+	
 		return userInfo;
 	}
 
