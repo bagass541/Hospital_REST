@@ -38,10 +38,10 @@ public class UserEntity {
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	@JoinTable(
-			name = "users_authorities",
+			name = "users_roles",
 			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "authorities_id"))
-	private Set<RoleEntity> authorities;
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<RoleEntity> roles;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
 	private List<AppointmentEntity> appointments;
