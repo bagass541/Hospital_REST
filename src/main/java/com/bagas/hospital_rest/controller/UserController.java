@@ -35,6 +35,16 @@ public class UserController {
 		return ResponseEntity.ok(users);
 	}
 	
+	@GetMapping("/{id}")
+	public ResponseEntity<User> getOneUser(@PathVariable("id") Long id) {
+		try {
+			User user = userService.getOne(id);
+			return ResponseEntity.ok(user);
+		} catch (UserNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
+		}
+	}
+	
 	@PostMapping
 	public ResponseEntity<User> createUser(@RequestBody UserEntity user, UriComponentsBuilder builder) {
 		try {
@@ -48,11 +58,10 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<User> getOneUser(@PathVariable("id") Long id) {
+	@PutMapping("/{id}")
+	public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserEntity userEntity) {
 		try {
-			User user = userService.getOne(id);
-			return ResponseEntity.ok(user);
+			return ResponseEntity.ok(userService.update(id, userEntity));
 		} catch (UserNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
 		}
@@ -66,14 +75,4 @@ public class UserController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
 		}
 	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserEntity userEntity) {
-		try {
-			return ResponseEntity.ok(userService.update(id, userEntity));
-		} catch (UserNotFoundException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
-		}
-	}
-	
 }
