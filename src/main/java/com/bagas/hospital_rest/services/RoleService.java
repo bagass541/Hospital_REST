@@ -40,19 +40,20 @@ public class RoleService {
 		return Role.toModel(roleRepo.save(roleEntity));
 	}
 	
+	public Role update(Long id, RoleEntity roleEntity) throws RoleNotFoundException {
+		RoleEntity updatingRole = roleRepo.findById(id)
+				.orElseThrow(() -> new RoleNotFoundException());
+		
+		if(roleEntity.getAuthority() != null) updatingRole.setAuthority(roleEntity.getAuthority());
+		if(roleEntity.getUsers() != null) updatingRole.setUsers(roleEntity.getUsers());
+		
+		return Role.toModel(roleRepo.save(updatingRole));
+	}
+	
 	public Long delete(Long id) throws RoleNotFoundException {
 		if(roleRepo.findById(id).get() == null) throw new RoleNotFoundException();
 		
 		roleRepo.deleteById(id);
 		return id;
-	}
-	
-	public Role update(Long id, RoleEntity roleEntity) throws RoleNotFoundException {
-		RoleEntity updatingRole = roleRepo.findById(id)
-				.orElseThrow(() -> new RoleNotFoundException());
-		
-		updatingRole.setAuthority(roleEntity.getAuthority());
-		
-		return Role.toModel(roleRepo.save(updatingRole));
 	}
 }
