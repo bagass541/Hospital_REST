@@ -33,17 +33,19 @@ public class Doctor extends RepresentationModel<Doctor> {
 			return null;
 		}
 		
+		Long doctorId = entity.getId();
 		Doctor doctor = new Doctor();
-		doctor.setId(entity.getId());
+		doctor.setId(doctorId);
 		doctor.setDoctorType(entity.getDoctorType());
 		doctor.setFio(entity.getFio());
 		doctor.setStartWork(entity.getStartWork());
 		doctor.setEndWork(entity.getEndWork());
 		
 		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DoctorController.class)
-				.getOneDoctor(doctor.getId())).withSelfRel();
+				.getOneDoctor(doctorId)).withSelfRel();
+		
 		Link appointments = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AppointmentController.class)
-				.getAppointmentsForDoctor(doctor.getId())).withRel("appointments");
+				.getAppointmentsForDoctor(doctorId)).withRel("appointments");
 				
 		doctor.add(selfLink, appointments);
 		

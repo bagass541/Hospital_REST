@@ -31,7 +31,10 @@ public class DoctorService {
 		return Doctor.toModel(doctor);
 	}
 	
-	public Long delete(Long id) {
+	public Long delete(Long id) throws DoctorNotFoundException {
+		doctorRepo.findById(id)
+				.orElseThrow(() -> new DoctorNotFoundException());
+		
 		doctorRepo.deleteById(id);
 		return id;
 	}
@@ -40,7 +43,7 @@ public class DoctorService {
 		DoctorEntity updatingDoctor = doctorRepo.findById(id)
 				.orElseThrow(() -> new DoctorNotFoundException());
 		
-		updatingDoctor.setId(doctor.getId());
+		updatingDoctor.setId(id);
 		updatingDoctor.setFio(doctor.getFio());
 		updatingDoctor.setDoctorType(doctor.getDoctorType());
 		updatingDoctor.setStartWork(doctor.getStartWork());
