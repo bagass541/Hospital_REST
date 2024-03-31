@@ -26,6 +26,21 @@ public class DoctorController {
 	
 	@Autowired
 	private DoctorService doctorService;
+	
+	@GetMapping
+	public ResponseEntity<List<Doctor>> getDoctors() {
+		List<Doctor> doctors = doctorService.getAll();
+		
+		return ResponseEntity.ok(doctors);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Doctor> getOneDoctor(@PathVariable("id") Long id) {
+		Doctor doctor = doctorService.getOne(id);
+		if(doctor == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Врач не найден");
+		
+		return ResponseEntity.ok(doctor);
+	}
 
 	@PostMapping
 	public ResponseEntity<Doctor> createDoctor(@RequestBody DoctorEntity doctor) {
@@ -39,29 +54,22 @@ public class DoctorController {
 
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<Doctor>> getDoctors() {
-		List<Doctor> doctors = doctorService.getAll();
-		
-		return ResponseEntity.ok(doctors);
-	}
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<Doctor> getOneDoctor(@PathVariable("id") Long id) {
-		Doctor doctor = doctorService.getOne(id);
-		if(doctor == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден");
-		
-		return ResponseEntity.ok(doctor);
+	@PutMapping("/{id}")
+	public ResponseEntity<Doctor> updateDoctor(@PathVariable("id") Long id, @RequestBody DoctorEntity doctor) {
+		try {
+			return ResponseEntity.ok(doctorService.updateDoctor(id, doctor));
+		} catch (DoctorNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Врач не найден", e);
+		}
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Long> deleteDoctor(@PathVariable("id") Long id) {
-		doctorService.delete(id);
+		try {
+			doctorService.delete(id);
+		} catch (DoctorNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Врач не найден", e);
+		}
 		return ResponseEntity.ok(id);
-	}
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<Doctor> changeDoctor(@PathVariable("id") Long id, @RequestBody DoctorEntity doctor) throws DoctorNotFoundException {
-		return ResponseEntity.ok(doctorService.updateDoctor(id, doctor));
 	}
 }
