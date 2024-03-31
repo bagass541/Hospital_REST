@@ -29,7 +29,7 @@ public class Role extends RepresentationModel<Role> {
 				.getOneRole(roleId)).withSelfRel();
 		
 		Link users = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
-				.getUsers()).withRel("users");
+				.getUsersByRole(roleId)).withRel("users");
 		
 		role.add(selfLink, users);
 		
