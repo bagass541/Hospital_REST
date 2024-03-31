@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -22,20 +21,19 @@ import com.bagas.hospital_rest.exceptions.UsernameExistsException;
 import com.bagas.hospital_rest.models.User;
 import com.bagas.hospital_rest.services.UserService;
 
-@RequestMapping("/users")
 @RestController
 public class UserController {
 
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping
+	@GetMapping("/users")
 	public ResponseEntity<List<User>> getUsers() {
 		List<User> users= userService.getAll();
 		return ResponseEntity.ok(users);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/users/{id}")
 	public ResponseEntity<User> getOneUser(@PathVariable("id") Long id) {
 		try {
 			User user = userService.getOne(id);
@@ -43,6 +41,11 @@ public class UserController {
 		} catch (UserNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Пользователь не найден", e);
 		}
+	}
+	
+	@GetMapping("/roles/{id}/users")
+	public ResponseEntity<List<User>> getUsersByRole(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(userService.getAllByRole(id));
 	}
 	
 	@PostMapping
@@ -58,7 +61,7 @@ public class UserController {
 		}
 	}
 	
-	@PutMapping("/{id}")
+	@PutMapping("/users/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserEntity userEntity) {
 		try {
 			return ResponseEntity.ok(userService.update(id, userEntity));
@@ -67,7 +70,7 @@ public class UserController {
 		}
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/users/{id}")
 	public ResponseEntity<Long> deleteUser(@PathVariable("id") Long id) {
 		try {	
 			return ResponseEntity.ok(userService.delete(id));
