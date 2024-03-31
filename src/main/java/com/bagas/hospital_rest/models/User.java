@@ -40,7 +40,8 @@ public class User extends RepresentationModel<User> {
 		Long userId = entity.getId();
 		user.setId(userId);
 		user.setUsername(entity.getUsername());
-		user.setAuthorities(entity.getAuthorities().stream().map(Role::toModel).collect(Collectors.toSet()));
+		
+		if(entity.getRoles() != null) user.setAuthorities(entity.getRoles().stream().map(Role::toModel).collect(Collectors.toSet()));
 		
 		if(entity.getUserInfo() != null) {
 			user.setUserInfo(UserInfo.toModel(entity.getUserInfo()));
