@@ -67,20 +67,20 @@ public class AppointmentController {
 		}
 	}
 	
-	@DeleteMapping("/appointments/{id}")
-	public ResponseEntity<Long> deleteAppointment(@PathVariable("id") Long id) {
-		try {
-			return ResponseEntity.ok(appointmentService.delete(id));
-		} catch (AppointmentNotFoundException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Запись не найдена", e);
-		}
-	}
-	
 	@PutMapping("/appointments/{id}")
 	public ResponseEntity<Appointment> updateAppointment(@PathVariable("id") Long id, @RequestBody AppointmentEntity appointment) {
 		try {
 			Appointment newAppointment = appointmentService.update(id, appointment);
 			return ResponseEntity.ok(newAppointment);
+		} catch (AppointmentNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Запись не найдена", e);
+		}
+	}
+	
+	@DeleteMapping("/appointments/{id}")
+	public ResponseEntity<Long> deleteAppointment(@PathVariable("id") Long id) {
+		try {
+			return ResponseEntity.ok(appointmentService.delete(id));
 		} catch (AppointmentNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Запись не найдена", e);
 		}

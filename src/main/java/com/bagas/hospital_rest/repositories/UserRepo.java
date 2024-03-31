@@ -12,7 +12,7 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
 	UserEntity findByUsername(String username);
 
-	@Query("SELECT DISTINCT u FROM UserEntity u LEFT JOIN FETCH u.userInfo ui LEFT JOIN FETCH u.appointments uapp LEFT JOIN FETCH u.authorities ua")
+	@Query("SELECT DISTINCT u FROM UserEntity u LEFT JOIN FETCH u.userInfo ui LEFT JOIN FETCH u.appointments uapp LEFT JOIN FETCH u.roles ur")
 	@Override List<UserEntity> findAll();
 	
 	

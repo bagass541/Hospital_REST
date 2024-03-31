@@ -7,13 +7,13 @@ import javax.management.relation.RoleNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -22,7 +22,7 @@ import com.bagas.hospital_rest.exceptions.RoleExistsException;
 import com.bagas.hospital_rest.models.Role;
 import com.bagas.hospital_rest.services.RoleService;
 
-@Controller
+@RestController
 public class RoleContoller {
 
 	@Autowired
@@ -60,15 +60,6 @@ public class RoleContoller {
 		}
 	}
 	
-	@DeleteMapping("/roles/{id}")
-	public ResponseEntity<Long> deleteRole(@PathVariable("id") Long id) {
-		try {
-			return ResponseEntity.ok(roleService.delete(id));
-		} catch (RoleNotFoundException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Роль не найдена", e);
-		}
-	}
-	
 	@PutMapping("/roles/{id}")
 	public ResponseEntity<Role> updateRole(@PathVariable("id") Long id, @RequestBody RoleEntity roleEntity) {
 		try {
@@ -78,4 +69,12 @@ public class RoleContoller {
 		}
 	}
 	
+	@DeleteMapping("/roles/{id}")
+	public ResponseEntity<Long> deleteRole(@PathVariable("id") Long id) {
+		try {
+			return ResponseEntity.ok(roleService.delete(id));
+		} catch (RoleNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Роль не найдена", e);
+		}
+	}
 }

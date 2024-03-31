@@ -17,6 +17,6 @@ public interface AppointmentRepo extends JpaRepository<AppointmentEntity, Long> 
 	@Query("SELECT app FROM AppointmentEntity app WHERE app.doctor.id = :id and app.user IS NOT NULL")
 	List<AppointmentEntity> findByDoctorId(@Param("id") Long id);
 	
-	@Query("SELECT app FROM AppointmentEntity app WHERE app.doctor.id = :doctorId AND app.user.id = :userId AND app.time = :time")
-	AppointmentEntity findByDoctorUserTime(@Param("doctorId") Long doctorId, @Param("userId") Long userId, @Param("time") LocalDateTime time);
+	@Query("SELECT app FROM AppointmentEntity app WHERE app.doctor.id = :doctorId AND app.time = :time")
+	AppointmentEntity findByDoctorByTime(@Param("doctorId") Long doctorId, @Param("time") LocalDateTime time);
 }

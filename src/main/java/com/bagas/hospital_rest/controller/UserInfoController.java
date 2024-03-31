@@ -51,20 +51,20 @@ public class UserInfoController {
 		}
 	}
 	
-	@DeleteMapping("/userInfos/{id}")
-	public ResponseEntity<Long> deleteUserInfo(@PathVariable("id") Long id) {
-		try {
-			return ResponseEntity.ok(userInfoService.delete(id));
-		} catch (UserInfoNotFoundException e) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Информация о пользователе не найдена", e);
-		}
-	}
-	
 	@PutMapping("/userInfos/{id}")
 	public ResponseEntity<UserInfo> updateUserInfo(@PathVariable("id") Long id, @RequestBody UserInfoEntity userInfoEntity) {
 		try {
 			return ResponseEntity.ok(userInfoService.update(id, userInfoEntity));
 		}  catch (UserInfoNotFoundException e) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Информация о пользователе не найдена", e);
+		}
+	}
+	
+	@DeleteMapping("/userInfos/{id}")
+	public ResponseEntity<Long> deleteUserInfo(@PathVariable("id") Long id) {
+		try {
+			return ResponseEntity.ok(userInfoService.delete(id));
+		} catch (UserInfoNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Информация о пользователе не найдена", e);
 		}
 	}

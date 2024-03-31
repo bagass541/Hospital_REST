@@ -31,21 +31,14 @@ public class UserInfo extends RepresentationModel<UserInfo>{
 		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserInfoController.class)
 				.getOneUserInfo(userInfoId)).withSelfRel();
 		
-		Link putLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserInfoController.class)
-				.updateUserInfo(userInfoId, entity)).withRel("update").withType("PUT");
-		
-		Link deleteLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserInfoController.class)
-				.deleteUserInfo(userInfoId)).withRel("delete").withType("DELETE");
-		
 		if(entity.getUser() != null) {
 			Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
 					.getOneUser(entity.getUser().getId())).withRel("user");
-			userInfo.add(selfLink, putLink, deleteLink, userLink);
+			userInfo.add(selfLink, userLink);
 		} else {
-			userInfo.add(selfLink, putLink, deleteLink);
+			userInfo.add(selfLink);
 		}
 	
 		return userInfo;
 	}
-
 }

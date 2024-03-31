@@ -28,16 +28,10 @@ public class Role extends RepresentationModel<Role> {
 		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RoleContoller.class)
 				.getOneRole(roleId)).withSelfRel();
 		
-		Link putLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RoleContoller.class)
-				.updateRole(roleId, entity)).withRel("update").withType("PUT");
-		
-		Link deleteLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RoleContoller.class)
-				.deleteRole(roleId)).withRel("delete").withType("DELETE");
-		
 		Link users = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
 				.getUsers()).withRel("users");
 		
-		role.add(selfLink, putLink, deleteLink, users);
+		role.add(selfLink, users);
 		
 		return role;
 	}

@@ -1,6 +1,7 @@
 package com.bagas.hospital_rest.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +24,6 @@ public class UserInfoEntity {
 	
 	private String number;
 	
-	@OneToOne(mappedBy = "userInfo")
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "userInfo")
 	private UserEntity user;
 }

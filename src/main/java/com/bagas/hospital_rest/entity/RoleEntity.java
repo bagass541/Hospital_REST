@@ -2,7 +2,9 @@ package com.bagas.hospital_rest.entity;
 
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +25,6 @@ public class RoleEntity {
 	
 	private String authority;
 	
-	@ManyToMany(mappedBy = "authorities")
+	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 	private Set<UserEntity> users;
 }

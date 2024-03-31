@@ -35,14 +35,6 @@ public class UserInfoService {
 		return UserInfo.toModel(userInfoRepo.save(userInfoEntity));
 	}
 	
-	public Long delete(Long id) throws UserInfoNotFoundException {
-		userInfoRepo.findById(id)
-			.orElseThrow(() -> new UserInfoNotFoundException());
-		
-		userInfoRepo.deleteById(id);
-		return id;
-	}
-	
 	public UserInfo update(Long id, UserInfoEntity userInfoEntity) throws UserInfoNotFoundException {
 		UserInfoEntity updatinUserInfo = userInfoRepo.findById(id)
 			.orElseThrow(() -> new UserInfoNotFoundException());
@@ -52,5 +44,13 @@ public class UserInfoService {
 		
 		userInfoRepo.save(updatinUserInfo);
 		return UserInfo.toModel(updatinUserInfo);
+	}
+	
+	public Long delete(Long id) throws UserInfoNotFoundException {
+		userInfoRepo.findById(id)
+			.orElseThrow(() -> new UserInfoNotFoundException());
+		
+		userInfoRepo.deleteById(id);
+		return id;
 	}
 }

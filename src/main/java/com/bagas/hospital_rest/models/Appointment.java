@@ -32,12 +32,6 @@ public class Appointment extends RepresentationModel<Appointment> {
 		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AppointmentController.class)
 				.getOneAppointment(appointmentId)).withSelfRel();
 		
-		Link putLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AppointmentController.class)
-				.updateAppointment(appointmentId, entity)).withRel("update").withType("PUT");
-			
-		Link deleteLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(AppointmentController.class)
-				.deleteAppointment(appointmentId)).withRel("delete").withType("DELETE");
-		
 		Link doctorLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(DoctorController.class)
 				.getOneDoctor(entity.getDoctor().getId())).withRel("doctor");
 		
@@ -45,7 +39,7 @@ public class Appointment extends RepresentationModel<Appointment> {
 		if(entity.getUser() != null) {
 			Link userLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
 					.getOneUser(entity.getUser().getId())).withRel("user");
-			userAppointment.add(selfLink, putLink, deleteLink, doctorLink, userLink);
+			userAppointment.add(selfLink, doctorLink, userLink);
 		} else {
 			userAppointment.add(selfLink, doctorLink);
 		}
