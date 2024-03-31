@@ -45,14 +45,24 @@ public class AppointmentService {
 	}
 	
 	public Appointment create(AppointmentEntity appointmentEntity) throws AppointmentNotFoundException {
-		AppointmentEntity theSameAppointment = appointmentRepo.findByDoctorUserTime(
+		AppointmentEntity theSameAppointment = appointmentRepo.findByDoctorByTime(
 				appointmentEntity.getDoctor().getId(), 
-				appointmentEntity.getUser().getId(), 
 				appointmentEntity.getTime());
 		
 		if(theSameAppointment != null) throw new AppointmentNotFoundException(); 
 		
 		return Appointment.toModel(appointmentRepo.save(appointmentEntity));
+	}
+	
+	public Appointment update(Long id, AppointmentEntity appointmentEntity) throws AppointmentNotFoundException {
+		AppointmentEntity updatingAppointment = appointmentRepo.findById(id)
+				.orElseThrow(() -> new AppointmentNotFoundException());
+
+		if(appointmentEntity.getDoctor() != null) updatingAppointment.setDoctor(appointmentEntity.getDoctor());
+		if(appointmentEntity.getUser() != null) updatingAppointment.setUser(appointmentEntity.getUser());
+		if(appointmentEntity.getTime() != null) updatingAppointment.setTime(appointmentEntity.getTime());
+		
+		return Appointment.toModel(appointmentRepo.save(updatingAppointment));
 	}
 	
 	public Long delete(Long id) throws AppointmentNotFoundException {
@@ -61,16 +71,4 @@ public class AppointmentService {
 		appointmentRepo.deleteById(id);
 		return id;
 	}
-	
-	public Appointment update(Long id, AppointmentEntity appointmentEntity) throws AppointmentNotFoundException {
-		AppointmentEntity updatingAppointment = appointmentRepo.findById(id)
-				.orElseThrow(() -> new AppointmentNotFoundException());
-		
-		if(appointmentEntity.getDoctor() != null) updatingAppointment.setDoctor(appointmentEntity.getDoctor());
-		if(appointmentEntity.getUser() != null) updatingAppointment.setUser(appointmentEntity.getUser());
-		if(appointmentEntity.getTime() != null) updatingAppointment.setTime(appointmentEntity.getTime());
-		
-		return Appointment.toModel(appointmentRepo.save(appointmentEntity));
-	}
-	
 }
