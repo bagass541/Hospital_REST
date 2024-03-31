@@ -26,6 +26,13 @@ public class UserService {
 		return userRepo.findAll().stream().map(User::toModel).collect(Collectors.toList());
 	}
 	
+	public User getOne(Long id) throws UserNotFoundException {
+		UserEntity userEntity = userRepo.findById(id)
+				.orElseThrow(() -> new UserNotFoundException());
+		
+		return User.toModel(userEntity);
+	}
+	
 	public User create(UserEntity user) throws UsernameExistsException {
 		if(userRepo.findByUsername(user.getUsername()) != null) throw new UsernameExistsException();
 		
@@ -34,21 +41,7 @@ public class UserService {
 		}
 		
 		return User.toModel(userRepo.save(user));
-	}
-	
-	public User getOne(Long id) throws UserNotFoundException {
-		UserEntity userEntity = userRepo.findById(id)
-				.orElseThrow(() -> new UserNotFoundException());
-		
-		return User.toModel(userEntity);
-	}
-	
-	public Long delete(Long id) throws UserNotFoundException {
-		if(userRepo.findById(id).get() == null) throw new UserNotFoundException();
-		
-		userRepo.deleteById(id);
-		return id;
-	}
+	} 
 	
 	public User update(Long id, UserEntity user) throws UserNotFoundException {
 		UserEntity updatingUser = userRepo.findById(id)
@@ -57,9 +50,16 @@ public class UserService {
 		if(user.getUsername() != null) updatingUser.setUsername(user.getUsername());
 		if(user.getPassword() != null) updatingUser.setPassword(user.getPassword());
 		if(user.getUserInfo() != null) updatingUser.setUserInfo(user.getUserInfo());
-		if(user.getAuthorities() != null) updatingUser.setAuthorities(user.getAuthorities());
+		if(user.getRoles() != null) updatingUser.setRoles(user.getRoles());
 		if(user.getAppointments() != null) updatingUser.setAppointments(user.getAppointments());
 		
 		return User.toModel(userRepo.save(updatingUser));
+	}
+	
+	public Long delete(Long id) throws UserNotFoundException {
+		if(userRepo.findById(id).get() == null) throw new UserNotFoundException();
+		
+		userRepo.deleteById(id);
+		return id;
 	}
 }
