@@ -33,6 +33,12 @@ public class UserService {
 		return User.toModel(userEntity);
 	}
 	
+	public List<User> getAllByRole(Long roleId) {
+		List<UserEntity> users = userRepo.findAllByRole(roleId);
+		
+		return users.stream().map(User::toModel).collect(Collectors.toList());
+	}
+	
 	public User create(UserEntity user) throws UsernameExistsException {
 		if(userRepo.findByUsername(user.getUsername()) != null) throw new UsernameExistsException();
 		
