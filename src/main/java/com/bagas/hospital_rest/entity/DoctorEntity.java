@@ -36,7 +36,7 @@ public class DoctorEntity {
 	@Column(name = "end_work")
 	private LocalTime endWork;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "doctor")
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "doctor")
 	@SQLRestriction(value = "user_id IS NOT NULL")
 	private List<AppointmentEntity> appointments;
 }
