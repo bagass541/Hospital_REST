@@ -17,10 +17,6 @@ public class DoctorService {
 	@Autowired
 	private DoctorRepo doctorRepo;
 	
-	public DoctorEntity createDoctor(DoctorEntity doctor) {
-		return doctorRepo.save(doctor);
-	}
-	
 	public List<Doctor> getAll() {
 		return doctorRepo.findAll().stream().map(Doctor::toModel).collect(Collectors.toList());
 	}
@@ -31,12 +27,8 @@ public class DoctorService {
 		return Doctor.toModel(doctor);
 	}
 	
-	public Long delete(Long id) throws DoctorNotFoundException {
-		doctorRepo.findById(id)
-				.orElseThrow(() -> new DoctorNotFoundException());
-		
-		doctorRepo.deleteById(id);
-		return id;
+	public DoctorEntity createDoctor(DoctorEntity doctor) {
+		return doctorRepo.save(doctor);
 	}
 	
 	public Doctor updateDoctor(Long id, DoctorEntity doctor) throws DoctorNotFoundException {
@@ -52,5 +44,13 @@ public class DoctorService {
 		doctorRepo.save(updatingDoctor);
 		
 		return Doctor.toModel(updatingDoctor);
+	}
+	
+	public Long delete(Long id) throws DoctorNotFoundException {
+		doctorRepo.findById(id)
+				.orElseThrow(() -> new DoctorNotFoundException());
+		
+		doctorRepo.deleteById(id);
+		return id;
 	}
 }
